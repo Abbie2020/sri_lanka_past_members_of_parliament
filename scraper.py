@@ -26,9 +26,13 @@ def scrape_mp(url):
         name = ""
     find_party = tree.xpath('//td[div="Last elected Party"]/a[1]/text()')
     if find_party:
-        party_list = find_party[0].split('(',1)
-        party = party_list[0]
-        party_id = party_list[1].split(')',1)[0]
+        try:
+            party_list = find_party[0].split('(',1)
+            party = party_list[0]
+            party_id = party_list[1].split(')',1)[0]
+        except:
+            party = find_party[0]
+            party_id = ""
     else:
         party = ""  
         party_id = ""                              
@@ -72,5 +76,5 @@ def scrape_mp(url):
         }
     print data
     scraperwiki.sqlite.save(unique_keys = ['id'], data = data)
-        
+       
 do_the_scraping()
