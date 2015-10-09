@@ -12,18 +12,14 @@ def do_the_scraping():
         data = requests.get(index_url + letter).json()
         for item in data:
             url = "http://www.parliament.lk/en/members-of-parliament/directory-of-members/viewMember/" + str(item['mem_intranet_id'])
-            scrape_mp(url)
+            name = str(item['member_fullname_eng'])
+            scrape_mp(name,url)
             time.sleep(0.5)
 
-def scrape_mp(url):
+def scrape_mp(name,url):
     page = requests.get(url)
     tree = html.fromstring(page.text)
     id = url.rsplit('/',1)[1]
-    find_mp_name = tree.xpath('//div[@class="components-wrapper"]/h2/text()') 
-    if find_mp_name:
-        name = find_mp_name[0].split(',',1)[0]
-    else:
-        name = ""
     find_party = tree.xpath('//td[div="Last elected Party"]/a[1]/text()')
     if find_party:
         try:
